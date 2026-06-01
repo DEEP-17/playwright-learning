@@ -39,12 +39,29 @@ test('login and search book', async ({ page }) => {
         'xpath=/html/body/div[1]/div[1]/nav/div[3]/div[2]/div[2]/div/div/form/input'
     );
     await searchInput.pressSequentially('NCERT');
-    await page.pause();
     const searchResult = page.locator('.absolute.left-0').first();
-    await page.getByText('NCERT SCIENCE [HINDI]').first().click();
+    await searchResult.locator('div').filter({ hasText: /^NCERT GEOGRAPHY \[HINDI\]$/ }).first().click();
+    // await page.pause();
+    // await page.getByText('NCERT SCIENCE [HINDI]').first().click();
     const addToCartButton = page.getByRole('button', { name: 'ADD TO CART' });
     await addToCartButton.click();
     const cartButton = page.getByRole('link', { name: 'Cart' });
     await cartButton.click();
+    // await page.waitForLoadState('networkidle');
+
+    // const deleteButtons = page.getByAltText('cart-delete');
+
+    // while (await deleteButtons.count() > 0) {
+    //     await deleteButtons.first().click();
+    // }
+    await page.waitForTimeout(3000);
+        const deleteButtons = page.getByAltText('cart-delete');
+
+    // Wait for cart page to load and at least one delete button to appear
+    // await deleteButtons.first().waitFor({ state: 'visible', timeout: 10000 });
+
+    // while (await deleteButtons.count() > 0) {
+    //     await deleteButtons.first().click();
+    // }
     await page.pause();
 });
