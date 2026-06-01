@@ -1,6 +1,12 @@
 import { test, expect, Page, Browser } from '@playwright/test';
 test.only('www.irctc.co.in', async ({ page }) => {
-    await page.goto('https://www.irctc.co.in/nget/train-search');
+    await page.goto(
+        'https://www.irctc.co.in/nget/train-search',
+        {
+            waitUntil: 'domcontentloaded',
+            timeout: 60000
+        }
+    );
     // await page.waitForLoadState('networkidle');
     const  fromButton= page.getByRole('searchbox', { name: 'Enter From station. Input is Mandatory.' });
     await fromButton.click();
@@ -63,8 +69,11 @@ await datePicker
 await page.locator('.ui-dropdown-trigger').first().click();
 
 await page.getByRole('option', {
-  name: 'First Class (FC)'
-}).click();
+  name: 'First Class (FC)',
+  exact: true
+}).click({
+  timeout: 10000
+});
 await page.locator('.ui-dropdown-trigger').nth(1).click();
 await page.getByRole('option', {
   name: 'PREMIUM TATKAL'
@@ -72,5 +81,5 @@ await page.getByRole('option', {
 await page.getByText('Flexible With Date').check();
 
  await page.locator('.search_btn.train_Search').click();
-  await page.pause();
+//   await page.pause();
 });
