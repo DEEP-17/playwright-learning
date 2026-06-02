@@ -1,5 +1,6 @@
 import { test, expect, Page, Browser } from '@playwright/test';
 test.only('www.irctc.co.in', async ({ page }) => {
+  test.setTimeout(120000);
     await page.goto(
         'https://www.irctc.co.in/nget/train-search',
         {
@@ -47,21 +48,21 @@ const datePicker = page.locator(
 
 const nextMonthButton = datePicker.locator('.ui-datepicker-next');
 
-// Keep clicking until October2026 is displayed
+// Keep clicking until August2026 is displayed
 while (
   !(
     await datePicker.locator('.ui-datepicker-title').textContent()
-  )?.includes('October2026')
+  )?.includes('August2026')
 ) {
-  await nextMonthButton.click();
+  await nextMonthButton.click( {timeout: 10000});
 }
 
 // Select day 15
 await datePicker
   .locator('td')
-  .filter({ hasText: /^15$/ })
+  .filter({ hasText: /^4$/ })
   .first()
-  .click();
+  .click({timeout: 10000});
 // const dateToSelect = datePicker.locator('.ui-datepicker-calendar').locator('td').filter({ hasText: '15' }).first();
 // await dateToSelect.click();
 
@@ -76,10 +77,10 @@ await page.getByRole('option', {
 });
 await page.locator('.ui-dropdown-trigger').nth(1).click();
 await page.getByRole('option', {
-  name: 'PREMIUM TATKAL'
+  name: 'General'
 }).click();
-await page.getByText('Flexible With Date').check();
+await page.getByText('Flexible With Date').check( {timeout: 10000});
 
- await page.locator('.search_btn.train_Search').click();
+ await page.locator('.search_btn.train_Search').click( {timeout: 10000});
 //   await page.pause();
 });
