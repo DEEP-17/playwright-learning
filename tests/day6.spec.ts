@@ -53,7 +53,6 @@ test('Debugging using Pause', async ({ page }) => {
 });
 test.describe('Parallel and Retry Suite', () => {
   test.describe.configure({ mode: 'parallel', retries: 2 });
-  
   test('Parallel Test 1', async ({ page }) => {
     await page.goto('https://automationexercise.com/');
     await expect(page).toHaveURL('https://automationexercise.com/');
