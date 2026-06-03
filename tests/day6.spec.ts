@@ -8,7 +8,6 @@ test('All Assertions Practice', async ({ page }) => {
 
   const productsLink = page.getByRole('link', { name: 'Products' });
   await expect(productsLink).toBeVisible();
-
   await expect(productsLink).toBeEnabled();
 
   await expect(productsLink).toContainText('Products');
