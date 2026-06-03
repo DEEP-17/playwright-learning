@@ -27,22 +27,22 @@ export default defineConfig({
   },
 
   use: {
-    headless: true,
-    launchOptions: {
-      slowMo: 1000, // Slows down execution by 1 second per action for easier viewing
-    },
+    /* Run in headed mode (Cloudflare frequently blocks headless browsers) */
+    headless: false, 
     
-    // --- Trace Viewer ---
-    /* Options: 'on', 'off', 'on-first-retry', 'retain-on-failure' */
-    /* 'retain-on-failure' is best practice as it saves space but helps debug failures */
-    trace: 'retain-on-failure', 
-    
-    // --- Videos & Automated Screenshots ---
-    /* Options: 'on', 'off', 'on-first-retry', 'retain-on-failure' */
-    video: 'retain-on-failure',
-    screenshot: 'only-on-failure', // Automatically take a screenshot if a test fails
-  },
+    /* Spoof a standard browser User-Agent */
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
 
+    /* Optional: Bypass HTTPS errors if the challenge messes with certificates */
+    ignoreHTTPSErrors: true,
+
+    launchOptions: {
+      slowMo: 1000, 
+    },
+    trace: 'retain-on-failure',
+    video: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+  },
   projects: [
     {
       name: 'chromium',
