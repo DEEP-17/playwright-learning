@@ -6,12 +6,14 @@ on:
       - main
       - master
       - day6
+      - day7
 
   pull_request:
     branches:
       - main
       - master
       - day6
+      - day7
 
 jobs:
   test:
