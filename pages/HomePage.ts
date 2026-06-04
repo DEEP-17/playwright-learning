@@ -47,7 +47,7 @@ export class HomePage {
 
   async openSearchResult(bookTitle: string) {
     await this.searchResults.waitFor({ state: 'visible', timeout: 15000 });
-    await this.page.waitForTimeout(500); // Allow dropdown to fully render
+    await this.page.waitForTimeout(500); 
     await this.searchResults
       .locator('div')
       .filter({ hasText: exactText(bookTitle) })
