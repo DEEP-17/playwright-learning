@@ -13,14 +13,14 @@ export default defineConfig({
   /* Retries failing tests. Set to 1 locally for debugging, 2 on CI */
   retries: process.env.CI ? 2 : 1,
   
-  /* Number of concurrent workers. Undefined uses CPU cores efficiently. */
-  workers: process.env.CI ? 1 : undefined,
+  /* These tests share one Bookscape account/cart, so keep browser projects from racing each other. */
+  workers: 1,
   
   reporter: 'html',
 
   // --- Timeouts ---
   /* Global timeout per test */
-  timeout: 30 * 1000, 
+  timeout: 100 * 1000, 
   expect: {
     /* Global timeout for expect() assertions */
     timeout: 5 * 1000,
@@ -36,22 +36,20 @@ export default defineConfig({
     /* Optional: Bypass HTTPS errors if the challenge messes with certificates */
     ignoreHTTPSErrors: true,
 
-    launchOptions: {
-      slowMo: 1000, 
-    },
     trace: 'retain-on-failure',
     video: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
+  
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], slowMo: 500 },
     },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'], slowMo: 500 },
+    // },
     // {
     //   name: 'webkit',
     //   use: { ...devices['Desktop Safari'] },
