@@ -1,9 +1,8 @@
 import type { Locator, Page } from '@playwright/test';
 
 export class BookPage {
-  static readonly url =
-    'https://bookscape.com/product-details/ncert-geography-hindi-9789351729938';
-  private static readonly cartUrl = 'https://bookscape.com/shopping-cart';
+  static readonly url = process.env.BOOK_URL || '';
+  private static readonly cartUrl = process.env.CART_URL || '';
 
   private readonly addToCartButton: Locator;
   private readonly goToCartButton: Locator;
@@ -18,20 +17,23 @@ export class BookPage {
   }
 
   async goto() {
+    const waitTimeout = Number(process.env.WAIT_TIMEOUT) || 10000;
     await this.page.goto(BookPage.url, { waitUntil: 'domcontentloaded' });
-    await this.cartActionButton.waitFor({ state: 'visible' });
+    await this.cartActionButton.waitFor({ state: 'visible', timeout: waitTimeout });
   }
 
   async addToCart() {
+    const clickTimeout = Number(process.env.CLICK_TIMEOUT) || 10000;
+    
     if (await this.goToCartButton.isVisible()) {
       return;
     }
 
-    await this.addToCartButton.waitFor({ state: 'visible', timeout: 10000 });
-    await this.addToCartButton.click({ timeout: 10000 }).catch(async () => {
+    await this.addToCartButton.waitFor({ state: 'visible', timeout: clickTimeout });
+    await this.addToCartButton.click({ timeout: clickTimeout }).catch(async () => {
       await this.addToCartButton.evaluate((button: HTMLElement) => button.click());
     });
-    await this.goToCartButton.waitFor({ state: 'visible', timeout: 10000 });
+    await this.goToCartButton.waitFor({ state: 'visible', timeout: clickTimeout });
   }
 
   async openCart() {

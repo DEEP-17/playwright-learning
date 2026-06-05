@@ -1,7 +1,7 @@
 import type { Locator, Page } from '@playwright/test';
 
 export class HomePage {
-  static readonly url = 'https://bookscape.com/';
+  static readonly url = process.env.BASE_URL || "";
 
   private readonly closeButton: Locator;
   private readonly closeIcon: Locator;
@@ -21,7 +21,7 @@ export class HomePage {
     await this.page.goto(HomePage.url, { waitUntil: 'domcontentloaded' });
   }
 
-  async closePopupIfVisible(timeout = 5000) {
+  async closePopupIfVisible(timeout = Number(process.env.POPUP_TIMEOUT) || 5000) {
     try {
       const closeIcon = this.closeIcon.first();
 
@@ -32,7 +32,7 @@ export class HomePage {
         await this.closeButton.waitFor({ state: 'visible', timeout: 1000 });
         await this.closeButton.click();
       } catch {
-        console.log('Popup not displayed');
+        console.log(process.env.POPUP_CLOSE_MESSAGE || 'Popup not displayed');
       }
     }
   }
@@ -46,8 +46,11 @@ export class HomePage {
   }
 
   async openSearchResult(bookTitle: string) {
-    await this.searchResults.waitFor({ state: 'visible', timeout: 15000 });
-    await this.page.waitForTimeout(500); 
+    const searchTimeout = Number(process.env.SEARCH_TIMEOUT) || 15000;
+    const smallWait = Number(process.env.SMALL_WAIT) || 500;
+    
+    await this.searchResults.waitFor({ state: 'visible', timeout: searchTimeout });
+    await this.page.waitForTimeout(smallWait);
     await this.searchResults
       .locator('div')
       .filter({ hasText: exactText(bookTitle) })

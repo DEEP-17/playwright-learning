@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@browserbasehq/stagehand": "^3.4.0",
-    "@playwright/mcp": "^0.0.75"
+    "@playwright/mcp": "^0.0.75",
+    "dotenv": "^17.4.2"
   }
 }

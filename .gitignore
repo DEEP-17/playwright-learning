@@ -8,3 +8,7 @@ node_modules/
 /playwright/.auth/
 .gitignore
 screenshots/
+
+# Environment variables
+.env
+.env.local
