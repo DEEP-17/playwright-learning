@@ -1,8 +1,9 @@
 import type { Locator, Page } from '@playwright/test';
+import { config } from '../env';
 
 export class BookPage {
-  static readonly url = process.env.BOOK_URL || '';
-  private static readonly cartUrl = process.env.CART_URL || '';
+  static readonly url = config.bookUrl;
+  private static readonly cartUrl = config.cartUrl;
 
   private readonly addToCartButton: Locator;
   private readonly goToCartButton: Locator;
@@ -17,23 +18,20 @@ export class BookPage {
   }
 
   async goto() {
-    const waitTimeout = Number(process.env.WAIT_TIMEOUT) || 10000;
     await this.page.goto(BookPage.url, { waitUntil: 'domcontentloaded' });
-    await this.cartActionButton.waitFor({ state: 'visible', timeout: waitTimeout });
+    await this.cartActionButton.waitFor({ state: 'visible', timeout: config.waitTimeout });
   }
 
   async addToCart() {
-    const clickTimeout = Number(process.env.CLICK_TIMEOUT) || 10000;
-    
     if (await this.goToCartButton.isVisible()) {
       return;
     }
 
-    await this.addToCartButton.waitFor({ state: 'visible', timeout: clickTimeout });
-    await this.addToCartButton.click({ timeout: clickTimeout }).catch(async () => {
+    await this.addToCartButton.waitFor({ state: 'visible', timeout: config.clickTimeout });
+    await this.addToCartButton.click({ timeout: config.clickTimeout }).catch(async () => {
       await this.addToCartButton.evaluate((button: HTMLElement) => button.click());
     });
-    await this.goToCartButton.waitFor({ state: 'visible', timeout: clickTimeout });
+    await this.goToCartButton.waitFor({ state: 'visible', timeout: config.clickTimeout });
   }
 
   async openCart() {

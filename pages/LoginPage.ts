@@ -1,15 +1,14 @@
 import type { Locator, Page } from '@playwright/test';
+import { config } from '../env';
 
 export class LoginPage {
-  static readonly url = process.env.LOGIN_URL || "";
+  static readonly url = config.loginUrl;
   private readonly emailOrPhoneInput: Locator;
   private readonly passwordInput: Locator;
   private readonly submitButton: Locator;
   private readonly loginSuccessAlert: Locator;
 
   constructor(private readonly page: Page) {
-    const successMessage = process.env.LOGIN_SUCCESS_MESSAGE || 'Logged in successfully';
-    
     this.emailOrPhoneInput = page.getByRole('textbox', {
       name: 'Email address or Phone Number',
     });
@@ -17,7 +16,7 @@ export class LoginPage {
     this.submitButton = page.getByTestId('button');
     this.loginSuccessAlert = page
       .getByRole('alert')
-      .filter({ hasText: successMessage });
+      .filter({ hasText: config.loginSuccessMessage });
   }
 
   async goto() {
@@ -25,12 +24,10 @@ export class LoginPage {
   }
 
   async login(emailOrPhone: string, password: string) {
-    const waitTimeout = Number(process.env.WAIT_TIMEOUT) || 10000;
-    
     await this.emailOrPhoneInput.fill(emailOrPhone);
     await this.submitButton.click();
     await this.passwordInput.fill(password);
     await this.submitButton.click();
-    await this.loginSuccessAlert.waitFor({ state: 'visible', timeout: waitTimeout });
+    await this.loginSuccessAlert.waitFor({ state: 'visible', timeout: config.waitTimeout });
   }
 }

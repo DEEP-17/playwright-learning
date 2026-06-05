@@ -1,7 +1,8 @@
 import type { Locator, Page } from '@playwright/test';
+import { config } from '../env';
 
 export class HomePage {
-  static readonly url = process.env.BASE_URL || "";
+  static readonly url = config.baseUrl;
 
   private readonly closeButton: Locator;
   private readonly closeIcon: Locator;
@@ -21,7 +22,7 @@ export class HomePage {
     await this.page.goto(HomePage.url, { waitUntil: 'domcontentloaded' });
   }
 
-  async closePopupIfVisible(timeout = Number(process.env.POPUP_TIMEOUT) || 5000) {
+  async closePopupIfVisible(timeout = config.popupTimeout) {
     try {
       const closeIcon = this.closeIcon.first();
 
@@ -32,7 +33,7 @@ export class HomePage {
         await this.closeButton.waitFor({ state: 'visible', timeout: 1000 });
         await this.closeButton.click();
       } catch {
-        console.log(process.env.POPUP_CLOSE_MESSAGE || 'Popup not displayed');
+        console.log(config.popupCloseMessage);
       }
     }
   }
@@ -46,11 +47,8 @@ export class HomePage {
   }
 
   async openSearchResult(bookTitle: string) {
-    const searchTimeout = Number(process.env.SEARCH_TIMEOUT) || 15000;
-    const smallWait = Number(process.env.SMALL_WAIT) || 500;
-    
-    await this.searchResults.waitFor({ state: 'visible', timeout: searchTimeout });
-    await this.page.waitForTimeout(smallWait);
+    await this.searchResults.waitFor({ state: 'visible', timeout: config.searchTimeout });
+    await this.page.waitForTimeout(config.smallWait);
     await this.searchResults
       .locator('div')
       .filter({ hasText: exactText(bookTitle) })

@@ -1,7 +1,8 @@
 import { expect, type Locator, type Page } from '@playwright/test';
+import { config } from '../env';
 
 export class CartPage {
-  static readonly url = process.env.CART_URL || '';
+  static readonly url = config.cartUrl;
 
   private readonly deleteButtons: Locator;
   private readonly confirmRemoveButton: Locator;
@@ -24,11 +25,8 @@ export class CartPage {
   }
 
   async removeAllBooksFromCart() {
-    const waitTimeout = Number(process.env.WAIT_TIMEOUT) || 10000;
-    const popupTimeout = Number(process.env.POPUP_TIMEOUT) || 5000;
-    
     await this.page.waitForLoadState('domcontentloaded');
-    await this.deleteButtons.first().waitFor({ state: 'visible', timeout: popupTimeout }).catch(() => undefined);
+    await this.deleteButtons.first().waitFor({ state: 'visible', timeout: config.popupTimeout }).catch(() => undefined);
 
     for (let attempt = 0; attempt < 10; attempt++) {
       const deleteButtonCount = await this.deleteButtons.count();
@@ -38,13 +36,13 @@ export class CartPage {
       }
 
       await this.deleteButtons.first().click();
-      await this.confirmRemoveButton.click({ timeout: waitTimeout });
+      await this.confirmRemoveButton.click({ timeout: config.waitTimeout });
       await expect
-        .poll(async () => this.deleteButtons.count(), { timeout: waitTimeout })
+        .poll(async () => this.deleteButtons.count(), { timeout: config.waitTimeout })
         .toBeLessThan(deleteButtonCount)
         .catch(async () => {
           await this.page.reload({ waitUntil: 'domcontentloaded' });
-          await this.deleteButtons.first().waitFor({ state: 'visible', timeout: popupTimeout }).catch(() => undefined);
+          await this.deleteButtons.first().waitFor({ state: 'visible', timeout: config.popupTimeout }).catch(() => undefined);
         });
     }
 
