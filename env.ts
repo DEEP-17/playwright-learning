@@ -37,9 +37,9 @@ const defaultConfig: EnvConfig = {
   bookUrl: 'https://bookscape.com/product-details/ncert-geography-hindi-9789351729938',
   cartUrl: 'https://bookscape.com/shopping-cart',
 
-  // User Credentials (from .env.example defaults)
-  userEmail: 'your-email@example.com',
-  userPassword: 'your-password',
+  // User Credentials (Original working values)
+  userEmail: 'mxilz51430@minitts.net',
+  userPassword: 'mxilz51430@minitts.neT',
 
   // Test Data
   searchTerm: 'NCERT GEOGRAPHY',
