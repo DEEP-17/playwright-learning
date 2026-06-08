@@ -8,7 +8,7 @@ on:
       - day6
       - day7
       - day8
-      - day-9
+      - day9
 
   pull_request:
     branches:
@@ -17,7 +17,7 @@ on:
       - day6
       - day7
       - day8
-      - day-9
+      - day9
 
 jobs:
   test:
