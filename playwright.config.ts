@@ -1,10 +1,15 @@
 import dotenv from 'dotenv';
 import { defineConfig, devices } from '@playwright/test';
+import { AUTH_STATE_PATH } from './auth/authState';
 
 dotenv.config();
 
+const useGlobalAuth = process.env.PW_USE_AUTH !== 'false';
+
 export default defineConfig({
   testDir: './tests',
+  globalSetup: useGlobalAuth ? './auth/global-setup.ts' : undefined,
+  globalTeardown: useGlobalAuth ? './auth/global-teardown.ts' : undefined,
   
   // --- Parallel Execution ---
   /* Run all tests in all files in parallel */
@@ -42,6 +47,7 @@ export default defineConfig({
     trace: 'retain-on-failure',
     video: 'retain-on-failure',
     screenshot: 'only-on-failure',
+    storageState: useGlobalAuth ? AUTH_STATE_PATH : undefined,
   },
   
   projects: [
@@ -49,10 +55,10 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
     // {
     //   name: 'webkit',
     //   use: { ...devices['Desktop Safari'] },

@@ -7,7 +7,15 @@
     "test": "playwright test",
     "headed": "playwright test --headed",
     "debug": "playwright test --debug",
-    "report": "playwright show-report"
+    "report": "playwright show-report",
+    "test:hooks": "PW_USE_AUTH=false playwright test --grep @hooks",
+    "test:annotations": "PW_USE_AUTH=false playwright test --grep @annotations",
+    "test:tags": "PW_USE_AUTH=false playwright test --grep @tags --grep-invert @auth",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "PW_USE_AUTH=false playwright test --grep @regression",
+    "test:auth": "playwright test --grep @auth",
+    "test:not-auth": "PW_USE_AUTH=false playwright test --grep-invert @auth",
+    "test:only-demo": "PW_USE_AUTH=false PW_ONLY_DEMO=true playwright test tests/day10-annotations.spec.ts"
   },
   "keywords": [],
   "author": "",

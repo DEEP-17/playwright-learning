@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 import { config } from '../env';
 
 export class BookPage {
@@ -7,27 +7,24 @@ export class BookPage {
 
   private readonly addToCartButton: Locator;
   private readonly goToCartButton: Locator;
-  private readonly cartActionButton: Locator;
 
   constructor(private readonly page: Page) {
     this.addToCartButton = page.getByRole('button', { name: /^ADD TO CART$/ }).first();
     this.goToCartButton = page.getByRole('button', { name: /GO TO CART/i }).first();
-    this.cartActionButton = page.getByRole('button', {
-      name: /ADD TO CART|GO TO CART/i,
-    }).first();
   }
 
   async goto() {
     await this.page.goto(BookPage.url, { waitUntil: 'domcontentloaded' });
-    await this.cartActionButton.waitFor({ state: 'visible', timeout: config.waitTimeout });
+    await this.waitForCartAction(config.waitTimeout);
   }
 
   async addToCart() {
-    if (await this.goToCartButton.isVisible()) {
+    const action = await this.waitForCartAction(config.clickTimeout);
+
+    if (action === 'go-to-cart') {
       return;
     }
 
-    await this.addToCartButton.waitFor({ state: 'visible', timeout: config.clickTimeout });
     await this.addToCartButton.click({ timeout: config.clickTimeout }).catch(async () => {
       await this.addToCartButton.evaluate((button: HTMLElement) => button.click());
     });
@@ -36,5 +33,25 @@ export class BookPage {
 
   async openCart() {
     await this.page.goto(BookPage.cartUrl, { waitUntil: 'domcontentloaded' });
+  }
+
+  private async waitForCartAction(timeout: number) {
+    await expect
+      .poll(async () => this.visibleCartAction(), { timeout })
+      .not.toBe('waiting');
+
+    return this.visibleCartAction();
+  }
+
+  private async visibleCartAction() {
+    if (await this.goToCartButton.isVisible()) {
+      return 'go-to-cart';
+    }
+
+    if (await this.addToCartButton.isVisible()) {
+      return 'add-to-cart';
+    }
+
+    return 'waiting';
   }
 }
