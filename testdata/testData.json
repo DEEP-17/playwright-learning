@@ -1,0 +1,155 @@
+{
+  "loginTests": [
+    {
+      "testId": "login_001",
+      "description": "Valid login with correct credentials",
+      "emailOrPhone": "user@example.com",
+      "password": "ValidPassword123",
+      "expectedResult": "success",
+      "tags": ["smoke", "positive"]
+    },
+    {
+      "testId": "login_002",
+      "description": "Invalid login with wrong password",
+      "emailOrPhone": "user@example.com",
+      "password": "WrongPassword123",
+      "expectedResult": "failure",
+      "tags": ["regression", "negative"]
+    },
+    {
+      "testId": "login_003",
+      "description": "Invalid login with non-existent email",
+      "emailOrPhone": "nonexistent@example.com",
+      "password": "AnyPassword123",
+      "expectedResult": "failure",
+      "tags": ["regression", "negative"]
+    },
+    {
+      "testId": "login_004",
+      "description": "Valid login with phone number",
+      "emailOrPhone": "+1234567890",
+      "password": "ValidPassword123",
+      "expectedResult": "success",
+      "tags": ["smoke", "positive"]
+    },
+    {
+      "testId": "login_005",
+      "description": "Login with empty email field",
+      "emailOrPhone": "",
+      "password": "ValidPassword123",
+      "expectedResult": "error",
+      "tags": ["regression", "validation"]
+    },
+    {
+      "testId": "login_006",
+      "description": "Login with empty password field",
+      "emailOrPhone": "user@example.com",
+      "password": "",
+      "expectedResult": "error",
+      "tags": ["regression", "validation"]
+    },
+    {
+      "testId": "login_007",
+      "description": "Login with both fields empty",
+      "emailOrPhone": "",
+      "password": "",
+      "expectedResult": "error",
+      "tags": ["regression", "validation"]
+    },
+    {
+      "testId": "login_008",
+      "description": "Valid login with special characters in email",
+      "emailOrPhone": "user+test@example.com",
+      "password": "ValidPassword123",
+      "expectedResult": "success",
+      "tags": ["smoke", "positive"]
+    }
+  ],
+  "bookTests": [
+    {
+      "testId": "book_001",
+      "bookName": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "price": 10.99,
+      "quantity": 1,
+      "expectedResult": "added_to_cart",
+      "tags": ["smoke", "shopping"]
+    },
+    {
+      "testId": "book_002",
+      "bookName": "To Kill a Mockingbird",
+      "author": "Harper Lee",
+      "price": 12.99,
+      "quantity": 2,
+      "expectedResult": "added_to_cart",
+      "tags": ["smoke", "shopping"]
+    },
+    {
+      "testId": "book_003",
+      "bookName": "1984",
+      "author": "George Orwell",
+      "price": 13.99,
+      "quantity": 5,
+      "expectedResult": "added_to_cart",
+      "tags": ["regression", "shopping"]
+    }
+  ],
+  "checkoutTests": [
+    {
+      "testId": "checkout_001",
+      "itemsInCart": 1,
+      "totalAmount": 10.99,
+      "paymentMethod": "credit_card",
+      "expectedResult": "payment_success",
+      "tags": ["smoke", "payment"]
+    },
+    {
+      "testId": "checkout_002",
+      "itemsInCart": 3,
+      "totalAmount": 36.97,
+      "paymentMethod": "debit_card",
+      "expectedResult": "payment_success",
+      "tags": ["regression", "payment"]
+    },
+    {
+      "testId": "checkout_003",
+      "itemsInCart": 0,
+      "totalAmount": 0,
+      "paymentMethod": "credit_card",
+      "expectedResult": "cannot_checkout",
+      "tags": ["regression", "validation"]
+    }
+  ],
+  "searchAndShoppingTests": [
+    {
+      "testId": "search_shop_001",
+      "description": "Search NCERT GEOGRAPHY and add to cart",
+      "emailOrPhone": "mxilz51430@minitts.net",
+      "password": "mxilz51430@minitts.neT",
+      "searchTerm": "NCERT",
+      "bookTitle": "NCERT GEOGRAPHY [HINDI]",
+      "expectedResult": "added_to_cart",
+      "tags": ["smoke", "search", "shopping"]
+    },
+    {
+      "testId": "search_shop_002",
+      "description": "Search and add NCERT SCIENCE book to cart",
+      "emailOrPhone": "mxilz51430@minitts.net",
+      "password": "mxilz51430@minitts.neT",
+      "searchTerm": "NCERT",
+      "bookTitle": "NCERT SCIENCE [HINDI]",
+      "expectedResult": "added_to_cart",
+      "tags": ["regression", "search", "shopping"]
+    },
+    {
+      "testId": "search_shop_003",
+      "description": "Search with different credentials and add book",
+      "emailOrPhone": "user@example.com",
+      "password": "TestPassword123",
+      "searchTerm": "NCERT BIOLOGY",
+      "bookTitle": "NCERT BIOLOGY [HINDI]",
+      "expectedResult": "added_to_cart",
+      "tags": ["regression", "search", "shopping"]
+    }
+  ]
+}
